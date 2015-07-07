@@ -1,20 +1,12 @@
-// This bot remembers its opponents last N moves
-// and estimates the most likely target fruit.
-// If the player can arrive there sooner, it will
-// race the opponent.  If not, it will avoid that 
-// piece of fruit and target a different one. This is
-// using memory for a real competitive advantage.
+// This bot detects the nearest piece of fruit
+// and moves towards. It has no memory.
 
-// Superpowers are
+// It's superpowers are
 // 1. Reflex
-// 2. Memory
 
 // globals
    //a list of the fruit on the board with {x, y, type} attributes
    var fruitlist = [];
-
-   //the current target
-   var nextfruit;
 
 // start of a new game
 function new_game() {
@@ -25,13 +17,8 @@ function make_move() {
    //update the fruitlist to reflect the current gameboard
    update_fruitlist();
    
-   //if the targeted fruit does not exist, get a new target
-   if (!exists(nextfruit)) {
-      nextfruit = closest_fruit();
-   }
-   
-   //take a step towards or pickup the fruit
-   return move_towards(nextfruit);
+   //take a step towards or pickup the closest fruit
+   return move_towards(closest_fruit());
 }
 
 //use the fruitlist to find the closest target

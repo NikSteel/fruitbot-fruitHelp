@@ -1,6 +1,15 @@
+// This bot detects the nearest piece of fruit,
+// decides to go get it, and moves towards its
+// destination until it arrives and gets it or 
+// the fruit disappears. (it remembers its choice).
+
+// It's superpowers are
+// 1. Reflex
+// 2. Memory
+
 // globals
    //a list of the fruit on the board with {x, y, type} attributes
-   var fruitlist = []
+   var fruitlist = [];
 
    //the current target
    var nextfruit;

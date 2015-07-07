@@ -1,23 +1,26 @@
 // globals
+
+//a list of the fruit on the board with {x, y, type} attributes
 var fruitlist = []
+
+//the current target
+var target;
+
+// distance to nearest fruit
+var nearest = 999;
+var nearX = -1;
+var nearY = -1;
 
 // start of a new game
 function new_game() {
-   var board = get_board();
-   // loop through board positions and make global fruitlist
-   for (var x = 0; x < board.length; ++x){
-      for (var y = 0; y < board[0].length; ++y){
-         // get value of cell being inspected
-         var value = board[x][y];
-         if (value > 0){ // cell holds a fruit
-            fruitlist.push({x:x,y:y,type:value});
-         }
-      }
-   }
-   console.log(fruitlist);
+   init_fruitlist();
 }
 
 function make_move() {
+   //update the fruitlist to reflect the current gameboard
+   update_fruitlist();
+   
+   
    var board = get_board();
 
    // we found an item! take it!
@@ -82,6 +85,49 @@ function make_move() {
    // debug code
    // console.log ("At " + myX + "," + myY + " - Nearest = " + nearX + "," + nearY + " - direction = " + direction);
    return direction;
+}
+
+//use the fruitlist to find the closest target
+function closestTarget() {
+   var me = {x:get_my_x(), y:get_my_Y()};
+   var distance;
+   var minimum = {distance:999, fruit:null};
+   
+   fruitlist.forEach(function (fruit) {
+      distance = Math.abs(me.x - fruit.x) + Math.abs(me.y - fruit.y);
+      
+   });
+}
+
+// loop through board positions and make global fruitlist
+function init_fruitlist() {
+   var board = get_board();
+   for (var x = 0; x < board.length; ++x){
+      for (var y = 0; y < board[0].length; ++y){
+         // get value of cell being inspected
+         var value = board[x][y];
+         if (value > 0){ // cell holds a fruit
+            fruitlist.push({x:x,y:y,type:value});
+         }
+      }
+   }
+   //uncomment to view the fruitlist in browser
+   //console.info(fruitlist);
+   
+   //to traverse the list of fruit use this form:
+   //fruitlist.forEach(function (fruit) {
+   //   console.info(fruit.x, fruit.y, fruit.type);
+   //});
+}
+
+// update the fruitlist to match the board 
+// when fruit is removed from the board, it stays in the fruitlist but has type 0
+function update_fruitlist() {
+   var board = get_board();
+   
+   fruitlist.forEach(function (fruit) {
+      fruit.type = board[fruit.x][fruit.y];
+   });
 }
 
 // Optionally include this function if you'd like to always reset to a 

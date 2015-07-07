@@ -1,12 +1,23 @@
-Welcome!
+# Welcome!
 
-Modify mybot.js to start writing your bot. Opening game.html will allow you to generate random boards, and either watch your bot play or step through one move at a time. Refer to http://fruitbots.org/api/api for available methods. gl/hf!
 
-Scribd.
+***
+## Usage
+***
 
-ps: you should be able to ignore everything in assets/, but if you want to disable the opponent bot from playing in game.html, go to assets/simplebot.js and find:
-    makeMove: function() {
-       // to disable to opponent, uncomment the next line
-       // return PASS;
+Copy two example bots from bots/examples and paste them into bots. Rename the copies in
+bots to player1.js and player2.js.  Edit them and have fun!
 
-Uncomment the "return PASS;" and your bot will be free to roam the board alone.
+To disable one of the bots, add the following line of code to the start of its makeMove function:
+       return PASS;
+
+For more info on the available functions, you can checkout the fruitbot api at http://fruitbots.org/api/api
+
+
+***
+## Change summary
+***
+
+1. Commented out the references to mybot.js and simplebot.js from game.html
+2. Added examples directory to bots
+

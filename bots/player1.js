@@ -1,3 +1,6 @@
+//name your fruitbot here:
+var name = "nikbot3";
+
 // This bot remembers its opponents last N moves
 // and estimates the most likely target fruit.
 // If the player can arrive there sooner, it will
@@ -16,6 +19,9 @@
    //the player's current target
    var my_nextfruit;
    
+   //the opponent's likely target
+   var opponent_nextfruit;
+   
    //the opponent's previous positions
    var opponent_position_memory = [];
    
@@ -26,6 +32,8 @@
 function new_game() {
    init_fruitlist();
    init_opponent_position_memory();
+   my_nextfruit = null;
+   opponent_nextfruit = null;
 }
 
 function make_move() {
@@ -36,16 +44,40 @@ function make_move() {
    observe_opponent();
 
    //estimate the opponent's destination
-   var opponent_nextfruit = estimate_opponent_destination();
+   opponent_nextfruit = estimate_opponent_destination();
    
    //if the targeted fruit does not exist, get a new target
    if (!exists(my_nextfruit)) {
-      my_nextfruit = closest_fruit({x:get_my_x(), y:get_my_y()}, fruitlist);
+      my_nextfruit = closest_fruit();
    }
+   
+   //if targeting the same location and the opponent has same or faster distance, evade
+   evade();
    
    //take a step towards or pickup the fruit
    return move_towards(my_nextfruit);
 }
+
+//if targeting the same location and the opponent has same or faster distance, evade
+function evade() {   
+   if ((opponent_nextfruit == my_nextfruit) && 
+       (distance({x:get_my_x(),y:get_my_y()},my_nextfruit) <= 
+        distance({x:get_opponent_x(),y:get_opponent_y()},opponent_nextfruit))) {
+      var taboolist = [];
+      taboolist.push(opponent_nextfruit);
+      my_nextfruit = closest_fruit(is_not_in_list,taboolist);
+   }
+   
+   //debug
+   //console.info(opponent_nextfruit);
+   //console.info(my_nextfruit);
+   //console.log(opponent_nextfruit == my_nextfruit);
+}
+
+function distance(player,fruit) {
+   return Math.abs(player.x - fruit.x) + Math.abs(player.y - fruit.y);
+}
+
 
 function observe_opponent() {
    //forget excess oldest opponent position
@@ -85,46 +117,22 @@ function estimate_opponent_destination() {
       region.end_y = get_opponent_y();
    }
    
-   // make a list of the fruit in that region
-   var flist = find_fruit_in(region);
-   if (flist == null) {
-      flist = fruitlist;
-   }
-   
-   //return the nearest fruit in the region
-   return closest_fruit({x:get_opponent_x(), y:get_opponent_y()}, flist);
+   // return the closest fruit in the range
+   return closest_fruit(is_in_range, region);
 }
 
-function find_fruit_in(region) {
-   var board = get_board();
-   var flist = [];
-   
-   for (var x = region.start_x; ((x < board.length) && (x < region.end_x)); ++x){
-      for (var y = region.start_y; ((y < board[0].length) && (y < region.end_y)); ++y){
-         // get value of cell being inspected
-         var value = board[x][y];
-         if (value > 0){ // cell holds a fruit
-            flist.push({x:x,y:y,type:value});
-         }
-      }
-   }
-   if (flist.length == 0) {
-      return null;
-   }
-   
-   return flist;
-}
 
 //use the fruitlist to find the closest target
 //takes in a pair of x and y coordinates and a fruitlist
 //returns a fruit
-function closest_fruit(position, flist) {
+function closest_fruit(predicate_func,arg) {
+   var me = {x:get_my_x(), y:get_my_y()};
    var distance;
    var minimum = {distance:999, fruit:null};
    
-   flist.forEach(function (fruit) {
-      if (exists(fruit)) {
-         distance = Math.abs(position.x - fruit.x) + Math.abs(position.y - fruit.y);
+   fruitlist.forEach(function (fruit) {
+      if ((exists(fruit)) && (predicate_func(fruit,arg))) {
+         distance = Math.abs(me.x - fruit.x) + Math.abs(me.y - fruit.y);
          if (distance < minimum.distance) {
                minimum.distance = distance;
                minimum.fruit = fruit;
@@ -135,6 +143,43 @@ function closest_fruit(position, flist) {
    return minimum.fruit;
 }
 
+
+//use the fruitlist to find the closest target
+function closest_fruit() {
+   var me = {x:get_my_x(), y:get_my_y()};
+   var distance;
+   var minimum = {distance:999, fruit:null};
+   
+   fruitlist.forEach(function (fruit) {
+      if (exists(fruit)) {
+         distance = Math.abs(me.x - fruit.x) + Math.abs(me.y - fruit.y);
+         if (distance < minimum.distance) {
+               minimum.distance = distance;
+               minimum.fruit = fruit;
+         }
+      }
+   });
+   
+   return minimum.fruit;
+}
+
+//returns true if the fruit is in the region and false otherwise
+function is_in_range(fruit, region) {
+   return ((fruit.x >= region.start_x) && (fruit.x <= region.end_x)
+            && (fruit.y >= region.start_y) && (fruit.y <= region.end_y));
+}  
+
+//returns true if fruit is not in the list and false otherwise
+function is_not_in_list(fruit, flist) {
+   flist.forEach(function (badfruit) {
+      if (fruit == badfruit) { //is in the list
+         return false;
+      }
+   });
+   //is not in the list
+   return true;
+}   
+
 function exists(fruit) {
    if (fruit == null)
       return false;
@@ -143,6 +188,10 @@ function exists(fruit) {
 
 //make a move towards the target or pick it up if arrived
 function move_towards(fruit) {
+   if (fruit == null) {
+      return PASS;
+   }
+   
    var me = {x:get_my_x(), y:get_my_y()};
    var action;
 
@@ -195,7 +244,7 @@ function init_fruitlist() {
    
    //to traverse the list of fruit use this form:
    //fruitlist.forEach(function (fruit) {
-   //   console.info(fruit.x, fruit.y, fruit.type);
+   //   code...
    //});
 }
 
@@ -216,3 +265,4 @@ function update_fruitlist() {
 //function default_board_number() {
 //    return 123;
 //}
+

@@ -48,6 +48,10 @@ function exists(fruit) {
 
 //make a move towards the target or pick it up if arrived
 function move_towards(fruit) {
+   if (fruit == null) {
+      return PASS;
+   }
+   
    var me = {x:get_my_x(), y:get_my_y()};
    var action;
 

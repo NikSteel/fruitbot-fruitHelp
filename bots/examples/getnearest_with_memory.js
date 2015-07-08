@@ -1,3 +1,6 @@
+//name your fruitbot here:
+var name = "nikbot2";
+
 // This bot detects the nearest piece of fruit,
 // decides to go get it, and moves towards its
 // destination until it arrives and gets it or 
@@ -17,6 +20,7 @@
 // start of a new game
 function new_game() {
    init_fruitlist();
+   nextfruit = null;
 }
 
 function make_move() {

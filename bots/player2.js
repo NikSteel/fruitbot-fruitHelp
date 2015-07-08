@@ -11,9 +11,6 @@ var name = "nikbot2";
 // 2. Memory
 
 // globals
-   //test of globals
-   var testnameclash = "p2              ";
-   
    //a list of the fruit on the board with {x, y, type} attributes
    var fruitlist = [];
 
@@ -23,6 +20,7 @@ var name = "nikbot2";
 // start of a new game
 function new_game() {
    init_fruitlist();
+   nextfruit = null;
 }
 
 function make_move() {
@@ -65,6 +63,10 @@ function exists(fruit) {
 
 //make a move towards the target or pick it up if arrived
 function move_towards(fruit) {
+   if (fruit == null) {
+      return PASS;
+   }
+   
    var me = {x:get_my_x(), y:get_my_y()};
    var action;
 

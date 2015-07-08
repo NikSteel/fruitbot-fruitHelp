@@ -1,3 +1,6 @@
+//name your fruitbot here:
+var name = "nikbot1";
+
 // This bot detects the nearest piece of fruit
 // and moves towards. It has no memory.
 
@@ -91,7 +94,8 @@ function init_fruitlist() {
          }
       }
    }
-   //uncomment to view the fruitlist in browser
+   
+   //debug
    //console.info(fruitlist);
    
    //to traverse the list of fruit use this form:

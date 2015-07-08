@@ -1,18 +1,12 @@
-// This bot detects the nearest piece of fruit,
-// decides to go get it, and moves towards its
-// destination until it arrives and gets it or 
-// the fruit disappears. (it remembers its choice).
+// This bot detects the nearest piece of fruit
+// and moves towards. It has no memory.
 
 // It's superpowers are
 // 1. Reflex
-// 2. Memory
 
 // globals
    //a list of the fruit on the board with {x, y, type} attributes
    var fruitlist = [];
-
-   //the current target
-   var nextfruit;
 
 // start of a new game
 function new_game() {
@@ -23,13 +17,8 @@ function make_move() {
    //update the fruitlist to reflect the current gameboard
    update_fruitlist();
    
-   //if the targeted fruit does not exist, get a new target
-   if (!exists(nextfruit)) {
-      nextfruit = closest_fruit();
-   }
-   
-   //take a step towards or pickup the fruit
-   return move_towards(nextfruit);
+   //take a step towards or pickup the closest fruit
+   return move_towards(closest_fruit());
 }
 
 //use the fruitlist to find the closest target
@@ -83,6 +72,11 @@ function move_towards(fruit) {
 
 // loop through board positions and make global fruitlist
 function init_fruitlist() {
+   //if fruitlist contains info, remove it.
+   while (fruitlist.length > 0) {
+      fruitlist.shift();
+   }
+   
    var board = get_board();
    for (var x = 0; x < board.length; ++x){
       for (var y = 0; y < board[0].length; ++y){

@@ -1,11 +1,9 @@
-// This bot remembers its opponents last N moves
-// and estimates the most likely target fruit.
-// If the player can arrive there sooner, it will
-// race the opponent.  If not, it will avoid that 
-// piece of fruit and target a different one. This is
-// using memory for a real competitive advantage.
+// This bot detects the nearest piece of fruit,
+// decides to go get it, and moves towards its
+// destination until it arrives and gets it or 
+// the fruit disappears. (it remembers its choice).
 
-// Superpowers are
+// It's superpowers are
 // 1. Reflex
 // 2. Memory
 
@@ -85,6 +83,11 @@ function move_towards(fruit) {
 
 // loop through board positions and make global fruitlist
 function init_fruitlist() {
+   //if fruitlist contains info, remove it.
+   while (fruitlist.length > 0) {
+      fruitlist.shift();
+   }
+   
    var board = get_board();
    for (var x = 0; x < board.length; ++x){
       for (var y = 0; y < board[0].length; ++y){

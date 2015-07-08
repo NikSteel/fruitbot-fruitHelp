@@ -190,27 +190,7 @@ function closest_fruit(player) {
    });
    
    return minimum.fruit;
-}
-
-//returns true if the fruit is in the region and false otherwise
-function is_in_range(fruit, region) {
-   return ((fruit.x >= region.start_x) && (fruit.x <= region.end_x)
-            && (fruit.y >= region.start_y) && (fruit.y <= region.end_y));
-}  
-
-//returns true if fruit is not in the list and false otherwise
-function is_not_in_list(fruit, flist) {
-   console.info(fruit);
-   flist.forEach(function (badfruit) {
-      console.info(badfruit);
-      console.log(fruit == badfruit);
-      if (fruit == badfruit) { //is in the list
-         return false;
-      }
-   });
-   //is not in the list
-   return true;
-}   
+} 
 
 function exists(fruit) {
    if (fruit == null)

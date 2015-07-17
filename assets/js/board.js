@@ -2,10 +2,6 @@ var HackF = {
   // Hacked for the St. Clair College Fruitbots
   // competition, courtesy of Hackforge
   //   "Have fun!" - Jeff Szusz & Randy Topliffe & William Comartin
-  
-  // ***This version features additions to add the fruitHelp API by Nik Steel
-  // it also changes how bots are loaded in. Instead of having bots in separate files,
-  // there must be a file called allbots
   enableHack: true,
 
   boardWidth: 10,
@@ -42,16 +38,18 @@ var HackF = {
 };
 
 var Board = {
-   
     init: function(boardNumber) {
+
+        if (!HackF.enableHack) {
+          Player2 = SimpleBot;
+          Player2.name = 'Simple Bot';
+        }
 
         var fullBoard;
         Board.min_size = 5;
         Board.max_size = 15;
         Board.move_num = 0;
-        
-        init_players();
-        
+
         if (typeof(localStorage) != 'undefined' ) {
             $("#select_largeboard").show();
             var val = null;
@@ -147,42 +145,35 @@ var Board = {
         GamePlay.start();
     },
     newGame: function() {
-        //for fruitHelp.js, added by Nik Steel
-        fruitHelp.init();
-       
         if (Player1.hasOwnProperty('new_game') && _.isFunction(Player1.new_game)) {
-          //setPlayerScope(Player1);
+          setPlayerScope(Player1);
           Player1.new_game();
-          //savePlayerScope(Player1);
+          savePlayerScope(Player1);
         }
 
         if (Player2.hasOwnProperty('new_game') && _.isFunction(Player2.new_game)) {
-          //setPlayerScope(Player2);
+          setPlayerScope(Player2);
           Player2.new_game();
-          //savePlayerScope(Player2);
+          savePlayerScope(Player2);
         }
         // SimpleBot currently doesn't need any sort of init, but if it did, it'd be called here too
     },
     processMove: function() {
         Board.move_num++;
         var move_start = new Date().getTime();
-        
-        //for fruitHelp.js, added by Nik Steel
-        fruitHelp.update();
-        
         window.currentPlayer = 1;
-        //setPlayerScope(Player1);
+        setPlayerScope(Player1);
         var myMove = Player1.makeMove();
         var elapsed = ((new Date().getTime() - move_start) / 1000).toFixed(2);
         console.log("["+Board.move_num+"] elapsed time: "+elapsed+"s");
-        //savePlayerScope(Player1);
+        savePlayerScope(Player1);
         move_start = new Date().getTime();
         window.currentPlayer = 2;
-        //setPlayerScope(Player2);
+        setPlayerScope(Player2);
         var simpleBotMove = Player2.makeMove();
         elapsed = ((new Date().getTime() - move_start) / 1000).toFixed(2);
         console.log("["+Board.move_num+"] elapsed time: "+elapsed+"s");
-        //savePlayerScope(Player2);
+        savePlayerScope(Player2);
         if ((Board.myX == Board.oppX) && (Board.myY == Board.oppY) && (myMove == TAKE) && (simpleBotMove == TAKE) && Board.board[Board.myX][Board.myY] > 0) {
             Board.myBotCollected[Board.board[Board.myX][Board.myY]-1] = Board.myBotCollected[Board.board[Board.myX][Board.myY]-1] + 0.5;
             Board.simpleBotCollected[Board.board[Board.oppX][Board.oppY]-1] = Board.simpleBotCollected[Board.board[Board.oppX][Board.oppY]-1] + 0.5;
@@ -367,5 +358,3 @@ function get_total_item_count(type) {
 function trace(mesg) {
     console.log(mesg);
 }
-
-

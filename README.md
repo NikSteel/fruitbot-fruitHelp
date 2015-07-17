@@ -11,3 +11,9 @@ To disable one of the bots, add the following line of code to the start of its m
 
 For more info on the available functions, you can checkout the fruitbot api at http://fruitbots.org/api/api
 
+
+## Change summary
+
+1. Commented out the references to mybot.js and simplebot.js from game.html
+2. Added examples directory to bots
+

@@ -2,6 +2,9 @@ var HackF = {
   // Hacked for the St. Clair College Fruitbots
   // competition, courtesy of Hackforge
   //   "Have fun!" - Jeff Szusz & Randy Topliffe & William Comartin
+  
+  // *** This version contains additions to support the fruitHelp API by Nik Steel
+  
   enableHack: true,
 
   boardWidth: 10,
@@ -145,6 +148,9 @@ var Board = {
         GamePlay.start();
     },
     newGame: function() {
+        // For the fruitHelp API, added by Nik Steel
+        fruitHelp.init();
+       
         if (Player1.hasOwnProperty('new_game') && _.isFunction(Player1.new_game)) {
           setPlayerScope(Player1);
           Player1.new_game();
@@ -161,6 +167,10 @@ var Board = {
     processMove: function() {
         Board.move_num++;
         var move_start = new Date().getTime();
+        
+        // For the fruitHelp API, added by Nik Steel
+        fruitHelp.update();
+        
         window.currentPlayer = 1;
         setPlayerScope(Player1);
         var myMove = Player1.makeMove();

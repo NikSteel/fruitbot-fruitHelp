@@ -1,4 +1,6 @@
-//The following are support functions for use with fruitbots
+//The fruitHelp API gives players a list of fruit objects with the structure
+//    fruit = {x,y,type}
+//and functions for operating with the fruit objects
 
 var fruitHelp = {
    //a list of positions where fruit has existed on the board
@@ -35,56 +37,134 @@ var fruitHelp = {
       this.fruitlist.forEach(function (fruit) {
          fruit.type = board[fruit.x][fruit.y];
       });
-   },
-   
-   exists: function(fruit) {
-      if (fruit == null)
-         return false;
-      return (fruit.type > 0);
-   },
-   
-   get_distance: function(player,fruit) {
-      return Math.abs(player.x - fruit.x) + Math.abs(player.y - fruit.y);
-   }, 
-   
-   //make a move towards the target or pick it up if arrived
-   move_towards: function(fruit) {
-      if (fruit == null) {
-         return PASS;
-      }
-      
-      var me = {x:get_my_x(), y:get_my_y()};
-      var action;
+   }
+};
 
-      if (fruit.x > me.x){
-         action = EAST;
-      }
-      if (fruit.x < me.x){
-         action = WEST;
-      }
-      if (fruit.y > me.y){
-         action = SOUTH;
-      }
-      if (fruit.y < me.y){
-         action = NORTH;
-      }
-      if ((fruit.x == me.x) && (fruit.y == me.y)){
-         action = TAKE;
-      }
-      
-      return action;
-   },
+//API functions and constants
+//Don't assume the values of these constants
+var FOR_ME = 1;
+var FOR_OPPONENT = 2;
 
+//value returned by getNumNeeded if impossible to get a point
+var HOPELESS = -1;
 
-   /*
-   forEachFruit: function(testFunc) {
-     this.fruitlist.forEach(function (fruit) {
-         if (botHelp.exists(fruit) {
-            testFunc(fruit);
+//you may force getMinFruit to ignore a fruit by returning this constant from your calculate function
+var POS_INFINITY = 999998;
+//you may force getMaxFruit to ignore a fruit by returning this constant from your calculate function
+var NEG_INFINITY = POS_INFINITY * (-1);
+
+function moveTo(fruit) {
+   if (fruit == null) {
+      return PASS;
+   }
+   
+   var me = {x:get_my_x(), y:get_my_y()};
+   var action;
+
+   if (fruit.x > me.x){
+      action = EAST;
+   }
+   if (fruit.x < me.x){
+      action = WEST;
+   }
+   if (fruit.y > me.y){
+      action = SOUTH;
+   }
+   if (fruit.y < me.y){
+      action = NORTH;
+   }
+   if ((fruit.x == me.x) && (fruit.y == me.y)){
+      action = TAKE;
+   }
+   
+   return action;
+}
+
+// performs a passed in function on each fruit that is available to be taken
+function forEachFruit(in_func) {
+   fruitHelp.fruitlist.forEach( function(fruit) {
+      if (fruitHelp.exists(fruit)) {
+         in_func(fruit);
+      }
+   });
+}
+
+// tells the player if the fruit object exists
+function exists(fruit) {
+   if (fruit == null)
+      return false;
+   return (fruit.type > 0);
+}
+
+//the distance between a player and a fruit
+function getDistance(purpose,fruit) {
+   var position = {x:0,y:0};
+   if (purpose == FOR_ME) {
+      position.x = get_my_x();
+      position.y = get_my_y();
+   }
+   if (purpose == FOR_OPPONENT) {
+      position.x = get_opponent_x();
+      position.y = get_opponent_y();
+   }
+   
+   return Math.abs(position.x - fruit.x) + Math.abs(position.y - fruit.y);
+}
+
+//the number of fruit needed of the fruit's type for the player to get a point for that type
+function getNumNeeded(purpose,fruit) {
+   var critical_value = get_total_item_count(fruit.type) / 2;
+   var value = 0;
+   if (purpose == FOR_ME) {
+      value = (critical_value - get_my_item_count(fruit.type));
+   }
+   if (purpose == FOR_OPPONENT) {
+      value = (critical_value - get_opponent_item_count(fruit.type));
+   }
+   
+   //ignore fruit for which the player already has more than half
+   if (value < 0) {
+      value = HOPELESS;
+   }
+   
+   //debug
+   //alert("purpose is " + purpose + " and critical value of type " + fruit.type + " is " + critical_value + " and value is " + value);
+   
+   return value;
+}
+
+//for each available fruit, calculate a value using the supplied function and return the minimum fruit
+function getMinFruit(priority_val_calc) {
+   var priority;
+   var minimum = {priority:POS_INFINITY, fruit:null};
+   
+   fruitlist.forEach(function (fruit) {
+      if (exists(fruit)) {
+         priority = priority_val_calc(fruit);
+         if (priority < minimum.priority) {
+               minimum.priority = priority;
+               minimum.fruit = fruit;
          }
       }
-   },
-   */
+   });
    
+   return minimum.fruit;
+} 
+
+//for each available fruit, calculate a value using the supplied function and return the maximum fruit
+function getMaxFruit(priority_val_calc) {
+   var priority;
+   var maximum = {priority:NEG_INFINITY, fruit:null};
    
-};
+   fruitlist.forEach(function (fruit) {
+      if (exists(fruit)) {
+         priority = priority_val_calc(fruit);
+         if (priority > maximum.priority) {
+               maximum.priority = priority;
+               maximum.fruit = fruit;
+         }
+      }
+   });
+   
+   return maximum.fruit;
+} 

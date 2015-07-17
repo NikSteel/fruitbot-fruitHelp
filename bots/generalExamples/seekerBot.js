@@ -1,14 +1,19 @@
-// globals
+//this bot targets and moves towards the nearest fruit
+//code example by Doug Sartori
 
+var name = "seekerBot";
+
+// global variables
 // distance to nearest fruit
 var nearest = 999;
 var nearX = -1;
 var nearY = -1;
 
 function new_game() {
-
-   // start of a new game
-
+   // clear globals at the start of a new game
+   nearest = 999;
+   nearX = -1;
+   nearY = -1;
 }
 
 function make_move() {
@@ -77,11 +82,3 @@ function make_move() {
    // console.log ("At " + myX + "," + myY + " - Nearest = " + nearX + "," + nearY + " - direction = " + direction);
    return direction;
 }
-
-// Optionally include this function if you'd like to always reset to a 
-// certain board number/layout. This is useful for repeatedly testing your
-// bot(s) against known positions.
-//
-//function default_board_number() {
-//    return 123;
-//}

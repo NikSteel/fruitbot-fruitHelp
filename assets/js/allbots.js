@@ -2,7 +2,7 @@ var Player1 = null;
 var Player2 = null;
 
 function init_players() {
-      set_players(1,2);
+      set_players(2,2);
 }
 
 function set_players(A,B) {
@@ -12,6 +12,7 @@ function set_players(A,B) {
    }
 }
 
+/*
 var setPlayerScope = function (Player) {
   Object.keys(Player).forEach(function (value, index) {
     //console.log("SET", value, Player[value]);
@@ -26,8 +27,8 @@ var savePlayerScope = function (Player) {
     }
   });
 };
-
-window._window = Object.keys(window);
+*/
+//window._window = Object.keys(window);
 
 var  nothingBot = {
    name: "nothingBot",

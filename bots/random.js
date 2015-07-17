@@ -1,3 +1,11 @@
+var name = "random bot";
+
+// This bot chooses a random direction and moves there.
+// If it finds a fruit it takes it.
+
+// Superpowers are
+// 1. Reflex
+
 function new_game() {
 }
 

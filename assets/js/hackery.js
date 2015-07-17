@@ -1,3 +1,4 @@
+/*
 var mockFunctions = function (funcs, Player) {
   funcs.forEach(function(func, index) {
     var exclude = [
@@ -33,3 +34,4 @@ var savePlayerScope = function (Player) {
 };
 
 window._window = Object.keys(window);
+*/

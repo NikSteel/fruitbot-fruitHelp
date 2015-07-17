@@ -1,4 +1,4 @@
-nothingBot: {
+var  nothingBot = {
    name: "nothingBot",
    
    new_game: function() {
@@ -7,4 +7,4 @@ nothingBot: {
    makeMove: function() {
       return PASS;
    }
-}
+};

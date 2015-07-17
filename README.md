@@ -2,18 +2,15 @@
 
 ## Usage
 
-Copy two example bots from bots/examples and paste them into bots. Rename the copies in
+Copy two example bots from the examples folder and paste them into the bots folder. Rename the copies in
 bots to player1.js and player2.js.  Edit them and have fun!
-
-To disable one of the bots, add the following line of code to the start of its makeMove function:
-
-       return PASS;
 
 For more info on the available functions, you can checkout the fruitbot api at http://fruitbots.org/api/api
 
+## frutiHelp API
 
-## Change summary
+The fruitHelp API by Nik Steel makes a list of all available fruit and includes functions for working with those,
+such as calculating the distance between a player and a piece of fruit, choosing the fruit that has
+the minimum distance, and choosing a player action to move towards the targeted fruit with the minimum path.
 
-1. Commented out the references to mybot.js and simplebot.js from game.html
-2. Added examples directory to bots
-
+A description of the available functions and their usage is in the fruitHelp_api.js file in this repo.

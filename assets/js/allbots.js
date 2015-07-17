@@ -1,3 +1,17 @@
+var Player1 = null;
+var Player2 = null;
+
+function init_players() {
+      set_players(1,2);
+}
+
+function set_players(A,B) {
+   if ((A > 0) && (B > 0) && (A <= allBotList.length) && (B <= allBotList.length)){
+      Player1 = allBotList[A-1];
+      Player2 = allBotList[B-1]; 
+   }
+}
+
 var setPlayerScope = function (Player) {
   Object.keys(Player).forEach(function (value, index) {
     //console.log("SET", value, Player[value]);
@@ -14,22 +28,6 @@ var savePlayerScope = function (Player) {
 };
 
 window._window = Object.keys(window);
-
-var Bots = {
-   Player1: null,
-   Player2: null,
-
-   init: function() {
-      Bots.setPlayers(1,2);
-   },
-
-   setPlayers: function(A,B) {
-      if ((A > 0) && (B > 0) && (A <= allBotList.length) && (B <= allBotList.length)){
-         Bots.Player1 = allBotList[A-1];
-         Bots.Player2 = allBotList[B-1]; 
-      }
-   },
-};
 
 var  nothingBot = {
    name: "nothingBot",

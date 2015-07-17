@@ -91,12 +91,12 @@ var GamePlay = {
                if (score > 0) {
                    ctx.font = "30px Arial";
                    ctx.fillStyle = "#000";
-                   ctx.fillText(Bots.Player1.name + " wins!", 0, 275);
+                   ctx.fillText(Player1.name + " wins!", 0, 275);
                }
                if (score < 0) {
                    ctx.font = "30px Arial";
                    ctx.fillStyle = "#000";
-                   ctx.fillText(Bots.Player2.name + " wins!", 0, 275);
+                   ctx.fillText(Player2.name + " wins!", 0, 275);
                }
                if (score == 0) {
                    ctx.font = "30px Arial";
@@ -115,7 +115,7 @@ var GamePlay = {
     displayScore: function(ctx, state) {
         ctx.font = "30px Arial";
         ctx.fillStyle = "#366B76";
-        ctx.fillText(Bots.Player1.name, 0, 50);
+        ctx.fillText(Player1.name, 0, 50);
         ctx.font = "15px Arial";
         ctx.fillStyle = "#000";
         for (var i=0; i<GamePlay.itemTypeCount; i++) {
@@ -124,7 +124,7 @@ var GamePlay = {
         }
         ctx.font = "30px Arial";
         ctx.fillStyle = "#82298E";
-        ctx.fillText(Bots.Player2.name, 0, 125);
+        ctx.fillText(Player2.name, 0, 125);
         ctx.font = "15px Arial";
         ctx.fillStyle = "#000";
         for (var i=0; i<GamePlay.itemTypeCount; i++) {

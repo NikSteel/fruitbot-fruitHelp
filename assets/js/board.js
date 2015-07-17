@@ -46,7 +46,7 @@ var Board = {
         Board.max_size = 15;
         Board.move_num = 0;
         
-        Bots.init();
+        init_players();
         
         if (typeof(localStorage) != 'undefined' ) {
             $("#select_largeboard").show();
@@ -143,16 +143,16 @@ var Board = {
         GamePlay.start();
     },
     newGame: function() {
-        if (Bots.Player1.hasOwnProperty('new_game') && _.isFunction(Bots.Player1.new_game)) {
-          setPlayerScope(Bots.Player1);
-          Bots.Player1.new_game();
-          savePlayerScope(Bots.Player1);
+        if (Player1.hasOwnProperty('new_game') && _.isFunction(Player1.new_game)) {
+          setPlayerScope(Player1);
+          Player1.new_game();
+          savePlayerScope(Player1);
         }
 
-        if (Bots.Player2.hasOwnProperty('new_game') && _.isFunction(Bots.Player2.new_game)) {
-          setPlayerScope(Bots.Player2);
-          Bots.Player2.new_game();
-          savePlayerScope(Bots.Player2);
+        if (Player2.hasOwnProperty('new_game') && _.isFunction(Player2.new_game)) {
+          setPlayerScope(Player2);
+          Player2.new_game();
+          savePlayerScope(Player2);
         }
         // SimpleBot currently doesn't need any sort of init, but if it did, it'd be called here too
     },
@@ -160,18 +160,18 @@ var Board = {
         Board.move_num++;
         var move_start = new Date().getTime();
         window.currentPlayer = 1;
-        setPlayerScope(Bots.Player1);
-        var myMove = Bots.Player1.makeMove();
+        setPlayerScope(Player1);
+        var myMove = Player1.makeMove();
         var elapsed = ((new Date().getTime() - move_start) / 1000).toFixed(2);
         console.log("["+Board.move_num+"] elapsed time: "+elapsed+"s");
-        savePlayerScope(Bots.Player1);
+        savePlayerScope(Player1);
         move_start = new Date().getTime();
         window.currentPlayer = 2;
-        setPlayerScope(Bots.Player2);
-        var simpleBotMove = Bots.Player2.makeMove();
+        setPlayerScope(Player2);
+        var simpleBotMove = Player2.makeMove();
         elapsed = ((new Date().getTime() - move_start) / 1000).toFixed(2);
         console.log("["+Board.move_num+"] elapsed time: "+elapsed+"s");
-        savePlayerScope(Bots.Player2);
+        savePlayerScope(Player2);
         if ((Board.myX == Board.oppX) && (Board.myY == Board.oppY) && (myMove == TAKE) && (simpleBotMove == TAKE) && Board.board[Board.myX][Board.myY] > 0) {
             Board.myBotCollected[Board.board[Board.myX][Board.myY]-1] = Board.myBotCollected[Board.board[Board.myX][Board.myY]-1] + 0.5;
             Board.simpleBotCollected[Board.board[Board.oppX][Board.oppY]-1] = Board.simpleBotCollected[Board.board[Board.oppX][Board.oppY]-1] + 0.5;

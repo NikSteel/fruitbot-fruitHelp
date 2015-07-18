@@ -83,7 +83,7 @@ function moveTo(fruit) {
 // performs a passed in function on each fruit that is available to be taken
 function forEachFruit(in_func) {
    fruitHelp.fruitlist.forEach( function(fruit) {
-      if (fruitHelp.exists(fruit)) {
+      if (exists(fruit)) {
          in_func(fruit);
       }
    });
@@ -96,8 +96,13 @@ function exists(fruit) {
    return (fruit.type > 0);
 }
 
-//the distance between a player and a fruit
+//the distance between a player and a fruit, lower is better
+//POS_INFINITY if does not exist
 function getDistance(purpose,fruit) {
+   if (!exists(fruit)) {
+      return POS_INFINITY;
+   }
+   
    var position = {x:0,y:0};
    if (purpose == FOR_ME) {
       position.x = get_my_x();
@@ -111,26 +116,34 @@ function getDistance(purpose,fruit) {
    return Math.abs(position.x - fruit.x) + Math.abs(position.y - fruit.y);
 }
 
-//the number of fruit needed of the fruit's type for the player to get a point for that type
-function getNumNeeded(purpose,fruit) {
+//the number of fruit needed of the fruit's type for the player to get a point for that type, lower is better
+//HOPELESS if does not exist or if the opponent already has the point or if all of the type are gone
+function getNumNeededToTie(purpose,fruit) {
+   if (!exists(fruit)) {
+      return HOPELESS;
+   }
+   
+   //the number of fruit of a particular fruit type for which the players tie
    var critical_value = get_total_item_count(fruit.type) / 2;
-   var value = 0;
-   if (purpose == FOR_ME) {
-      value = (critical_value - get_my_item_count(fruit.type));
-   }
-   if (purpose == FOR_OPPONENT) {
-      value = (critical_value - get_opponent_item_count(fruit.type));
+   
+   //the number of fruit remaining for the current player to get a point for the type
+   var my_value = (critical_value - get_my_item_count(fruit.type));
+   //the number of fruit remaining for the opponent to get a point for the type
+   var opp_value = (critical_value - get_opponent_item_count(fruit.type));
+   
+   //if either player is eligible to get a point or tie
+   if ((my_value >= 0) && (opp_value >= 0)) {
+      if (purpose == FOR_ME) {
+         return my_value;
+      }
+   
+      if (purpose == FOR_OPPONENT) {
+         return opp_value;
+      }
    }
    
-   //ignore fruit for which the player already has more than half
-   if (value < 0) {
-      value = HOPELESS;
-   }
-   
-   //debug
-   //alert("purpose is " + purpose + " and critical value of type " + fruit.type + " is " + critical_value + " and value is " + value);
-   
-   return value;
+   //otherwise, no one is eligible to get a point for that fruit category
+   return HOPELESS;
 }
 
 //for each available fruit, calculate a value using the supplied function and return the minimum fruit
@@ -138,7 +151,7 @@ function getMinFruit(priority_val_calc) {
    var priority;
    var minimum = {priority:POS_INFINITY, fruit:null};
    
-   fruitlist.forEach(function (fruit) {
+   fruitHelp.fruitlist.forEach(function (fruit) {
       if (exists(fruit)) {
          priority = priority_val_calc(fruit);
          if (priority < minimum.priority) {
@@ -156,7 +169,7 @@ function getMaxFruit(priority_val_calc) {
    var priority;
    var maximum = {priority:NEG_INFINITY, fruit:null};
    
-   fruitlist.forEach(function (fruit) {
+   fruitHelp.fruitlist.forEach(function (fruit) {
       if (exists(fruit)) {
          priority = priority_val_calc(fruit);
          if (priority > maximum.priority) {

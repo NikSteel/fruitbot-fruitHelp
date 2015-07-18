@@ -20,22 +20,25 @@ getDistance( <purpose>, <fruit> );
 
 //the number of fruit needed of the fruit's type for the player to get a point for that type
 //lower is better
-getNumNeeded( <purpose>, <fruit> );
+getNumNeededToTie( <purpose>, <fruit> );
 //if opponent already has a point in the category, the num need is equal to this constant:
 HOPELESS
 
 //uses the supplied calculation function to find the best fruit for the player
-getBestMin( <purpose>, <function(fruit) to calculate a priority value> );
+getMinFruit( <purpose>, <function(fruit) to calculate a priority value> );
 //you may force getMinFruit to ignore a fruit by returning this constant from your calculate function
 POS_INFINITY
 
 //uses the supplied calculation function to find the best fruit for the player
-getBestMax( <purpose>, <function(fruit) to calculate a priority value> );
+getMaxFruit( <purpose>, <function(fruit) to calculate a priority value> );
 //you may force getMaxFruit to ignore a fruit by returning this constant from your calculate function
 NEG_INFINITY
-
 
 //returns a player action constant (like NORTH, SOUTH, TAKE, etc.) to move with the
 //minimum distance path towards a piece of fruit
 moveTo( <fruit> );
 //if you move to a fruit that does not exist (because it is null or taken), the player will PASS
+
+//returns true if the fruit object is not null and is available to be taken
+exists( <fruit> );
+//note that all of these API functions will check existence, so it is safe to pass a null fruit object to any API function.

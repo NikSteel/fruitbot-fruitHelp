@@ -12,10 +12,10 @@ function new_game() {
 }
 
 function make_move() {
-   //if the targeted fruit does not exist, get a new target
-   if (!exists(nextfruit)) {
+   //if the targeted fruit does not exist or will not affect the score, get a new target
+   if ((!exists(nextfruit)) || (getNumNeededToTie(FOR_ME,nextfruit) == HOPELESS)) {
       nextfruit = getMinFruit(function(fruit) {
-         var num_needed = getNumNeeded(FOR_ME,fruit);
+         var num_needed = getNumNeededToTie(FOR_ME,fruit);
          if (num_needed == HOPELESS) {
             return POS_INFINITY;
          }

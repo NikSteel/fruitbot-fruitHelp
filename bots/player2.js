@@ -1,26 +1,23 @@
-//this bot does nothing
+//This bot uses the fruitHelp API to seek the nearest fruit
+//Example by Nik Steel
 
-var name = "p2";
+var name = "nearBot";
+
+//Global memory
+var nextfruit;
 
 function new_game() {
+   nextfruit = null;
 }
 
 function make_move() {
-   alert("my name is " + name + ", my fruit counts are type1: " + get_my_item_count(1) + ", type 2: " + get_my_item_count(2) + ", type 3: " + get_my_item_count(3) + ", type 4: " + get_my_item_count(4) + ". My opponent's fruit counts are type1: " + get_opponent_item_count(1) + ", type 2: " + get_opponent_item_count(2) + ", type 3: " + get_opponent_item_count(3) + ", type 4: " + get_opponent_item_count(4)); 
-
-   var board = get_board();
-
-   // we found an item! take it!
-   if (board[get_my_x()][get_my_y()] > 0) {
-       return TAKE;
+   //if the targeted fruit does not exist or will not affect the score, get a new target
+   if ((!exists(nextfruit)) || (getNumNeededToTie(FOR_ME,nextfruit) == HOPELESS)) {
+      nextfruit = getMinFruit(function(fruit) {
+         return getDistance(FOR_ME,fruit);
+      });
    }
-
-   var rand = Math.random() * 4;
-
-   if (rand < 1) return NORTH;
-   if (rand < 2) return SOUTH;
-   if (rand < 3) return EAST;
-   if (rand < 4) return WEST;
-
-   return PASS;
+   
+   //take a step towards or pickup the fruit
+   return moveTo(nextfruit);
 }

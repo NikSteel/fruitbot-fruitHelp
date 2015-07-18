@@ -46,7 +46,7 @@ var FOR_ME = 1;
 var FOR_OPPONENT = 2;
 
 //value returned by getNumNeeded if impossible to get a point
-var HOPELESS = 100;
+var HOPELESS = -1;
 
 //you may force getMinFruit to ignore a fruit by returning this constant from your calculate function
 var POS_INFINITY = 999998;
@@ -124,13 +124,14 @@ function getNumNeededToTie(purpose,fruit) {
    }
    
    //the number of fruit of a particular fruit type for which the players tie
-   var critical_value = (get_total_item_count(fruit.type) / 2) * 10;
+   var critical_value = (get_total_item_count(fruit.type) / 2);
    
    //the number of fruit remaining for the current player to get a point for the type
-   var my_value = (critical_value - (get_my_item_count(fruit.type) * 10));
+   var my_value = (critical_value - get_my_item_count(fruit.type));
    //the number of fruit remaining for the opponent to get a point for the type
-   var opp_value = (critical_value - (get_opponent_item_count(fruit.type) * 10));
+   var opp_value = (critical_value - get_opponent_item_count(fruit.type));
    
+   //debug
    //alert("f type " + fruit.type + ", c val " + critical_value + ", tot count " + get_total_item_count(fruit.type) + ", my count " + get_my_item_count(fruit.type) + ", opp count " + get_opponent_item_count(fruit.type) + ", my val " + my_value + ", opp val " + opp_value + ", hopeless is " + HOPELESS + ", POS_INFINITY is " + POS_INFINITY + ", NEG_INFINITY is " + NEG_INFINITY); 
    
    //if either player is eligible to get a point or tie
@@ -161,8 +162,6 @@ function getMinFruit(priority_val_calc) {
          }
       }
    });
-   if (name == "needBot")
-      alert("minimum priority was " + minimum.priority + " for fruit x: " + minimum.fruit.x + ", y: " + minimum.fruit.y + ", type: " + minimum.fruit.type + ". Total item count is " + get_total_item_count(minimum.fruit.type));  
    
    return minimum.fruit;
 } 

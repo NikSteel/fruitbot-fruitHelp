@@ -1,35 +1,11 @@
-//This bot uses the fruitHelp API to seek the nearest fruit of the most needed type
-//Example by Nik Steel
+//this bot does nothing
 
-var name = "needBot";
-
-//Global memory
-var nextfruit;
+var name = "p1";
 
 function new_game() {
-   //clear the global memory at game start
-   nextfruit = null;
 }
 
 function make_move() {
-   //alert("hopeless is " + HOPELESS + ", POS_INFINITY is " + POS_INFINITY + ", NEG_INFINITY is " + NEG_INFINITY);
-   
-   //if the targeted fruit does not exist or will not affect the score, get a new target
-   if ((!exists(nextfruit)) || (getNumNeededToTie(FOR_ME,nextfruit) == HOPELESS)) {
-      alert("new target");
-      nextfruit = getMinFruit(function(fruit) {
-         var num_needed = getNumNeededToTie(FOR_ME,fruit);
-         if (num_needed == HOPELESS) {
-            alert("avoiding f type " + fruit.type);
-            return POS_INFINITY;
-         }
-         return getDistance(FOR_ME,fruit) + (num_needed*1000);
-      });
-      alert("targeting x: " + nextfruit.x + ", y: " + nextfruit.y + ", type: " + nextfruit.type + ". getNumNeededToTie = " + getNumNeededToTie(FOR_ME,nextfruit) + " and getDistance() = " + getDistance(FOR_ME,nextfruit));
-   }
-   
-
-   
-   //take a step towards or pickup the fruit
-   return moveTo(nextfruit);
+   alert("my name is " + name + "my fruit counts are type1: " + get_my_item_count(1) + ", type 2: " + get_my_item_count(2) + ", type 3: " + get_my_item_count(3) + ", type 4: " + get_my_item_count(4) + ". My opponent's fruit counts are type1: " + get_opponent_item_count(1) + ", type 2: " + get_opponent_item_count(2) + ", type 3: " + get_opponent_item_count(3) + ", type 4: " + get_opponent_item_count(4)); 
+   return PASS;
 }
